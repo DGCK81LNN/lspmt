@@ -1,132 +1,27 @@
+/*!
 // ==UserScript==
 // @name         LNNの贴吧多功能图片解密工具
 // @namespace    https://dgck81lnn.github.io/blog/
 // @version      0.0.2
 // @author       DGCK81LNN
 // @match        https://tieba.baidu.com/p/*
-// @require      https://hub.xn--p8jhe.tw/DGCK81LNN/lspmt/raw/main/lspmt-lib/index.js
 // ==/UserScript==
+*/
 
-/// <reference types="./lspmt-lib" />
+import * as LSPMT from "./lib.mjs"
 
-window._LSPMTLoadPromise.then(/** @param {typeof LSPMT} LSPMT */function (LSPMT) {
+LSPMT.loaded.then(function () {
   "use strict"
-
-  console.log(LSPMT)
 
   if (!document.querySelector(".BDE_Image")) return
 
-  document.head.appendChild(document.createElement("style")).textContent = `\
-#lspmt-panel {
-  background-color: #bed;
-  padding: 2vh 2vh;
-  font-size: 2vh;
-  border-bottom: 2px solid #398;
-  box-shadow: 0 -1vh 2vh 1vh rgba(0,0,0,0.5);
-  position: sticky;
-  z-index: 514;
-  top: 0;
-  width: 100%;
-  box-sizing: border-box;
-}
-#lspmt-panel * {
-  line-height: 120%;
-}
-#lspmt-panel summary,
-#lspmt-panel button {
-  all: revert;
-  font-size: inherit;
-}
-#lspmt-panel-heading>* {
-  display: inline;
-}
-#lspmt-panel-body>div {
-  margin-top: 2vh;
-}
-#lspmt-panel-menu,
-#lspmt-panel-menu div {
-  display: flex;
-  flex: auto 1;
-  align-items: stretch;
-  justify-content: stretch;
-  flex-wrap: wrap;
-}
-#lspmt-panel-menu button {
-  flex: auto 1;
-  height: 2.5em;
-  margin: 0.1em;
-}
-*[data-lspmt] {
-  display: inline-block;
-  border: 6px double transparent;
-  padding: 2px;
-  margin: -2px 0;
-  max-width: 100%;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-*[data-lspmt]:hover { border-color: #ccc }
-*[data-lspmt=batch] { border-color: #3ba }
-*[data-lspmt=batch]:hover { border-color: #276 }
-*[data-lspmt=selected] { border-color: #f00 }
-*[data-lspmt=selected]:hover { border-color: #c00 }
-*[hidden] { display: none !important }
-.lspmt-imgwrap {
-  position: relative;
-  display: inline-block;
-}
-.lspmt-imgwrap.lspmt-imgwrap-loading::before {
-  content: " ";
-  position: absolute;
-  top: 0; right: 0; bottom: 0; left: 0;
-  margin: auto;
-  width: 5vh; height: 5vh;
-  border: 1vh solid #3ba;
-  border-bottom-color: transparent;
-  border-radius: 5vh;
-  animation: lspmt-imgwrap-spinner 1s linear infinite;
-}
-@keyframes lspmt-imgwrap-spinner {
-  to { transform: rotate(360deg) }
-}`
+  document.head.appendChild(document.createElement("style"))
+    .textContent = require("./inject.css")
 
   const $panel = document.createElement("section")
   document.body.prepend($panel)
   $panel.id = "lspmt-panel"
-  $panel.innerHTML = `\
-<details>
-  <summary id=lspmt-panel-heading><h2>LNN 多功能图片解密工具</h2></summary>
-  <div id=lspmt-panel-body>
-    <div id=lspmt-panel-hint-selected hidden
-      >要对带<span data-lspmt=selected>红色边框</span
-      >的图片进行什么操作？<button type=button id=lspmt-button-deselect>取消</button
-      ></div>
-    <div id=lspmt-panel-hint-batch hidden
-      >点击带<span data-lspmt=batch>青绿色边框</span
-      >的图片来<b id=lspmt-panel-hint-batch-action>解码无影坦克</b>。<!--
-    --><button type=button id=lspmt-button-batchdone>完成</button
-      ></div>
-    <div id=lspmt-panel-menu>
-      <div>
-        <button type=button id=lspmt-button-wytk>解码无影坦克</button>
-        <button type=button id=lspmt-button-tpwjj>提取图片文件夹</button>
-      </div>
-      <div>
-        <div>
-          <button type=button id=lspmt-button-tphxr>图片解混淆（行）</button>
-          <button type=button id=lspmt-button-tphxrc>图片解混淆（行+列）</button>
-        </div>
-        <div>
-          <button type=button id=lspmt-button-tphxrr>图片混淆（行）</button>
-          <button type=button id=lspmt-button-tphxrrc>图片混淆（行+列）</button>
-        </div>
-      </div>
-    </div>
-    <div id=lspmt-panel-about>by <!--
-    --><a href="https://github.com/DGCK81LNN" rel=nofollow target=_blank
-      >DGCK81LNN</a></div>
-  </div>
-</details>`
+  $panel.innerHTML = require("./inject.html")
 
   function $$$(id) { return document.getElementById(id) }
 

@@ -1,0 +1,72 @@
+#lspmt-panel {
+  background-color: #bed;
+  padding: 2vh 2vh;
+  font-size: 2vh;
+  border-bottom: 2px solid #398;
+  box-shadow: 0 -1vh 2vh 1vh rgba(0,0,0,0.5);
+  position: sticky;
+  z-index: 514;
+  top: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+#lspmt-panel * {
+  line-height: 120%;
+}
+#lspmt-panel summary,
+#lspmt-panel button {
+  all: revert;
+  font-size: inherit;
+}
+#lspmt-panel-heading>* {
+  display: inline;
+}
+#lspmt-panel-body>div {
+  margin-top: 2vh;
+}
+#lspmt-panel-menu,
+#lspmt-panel-menu div {
+  display: flex;
+  flex: auto 1;
+  align-items: stretch;
+  justify-content: stretch;
+  flex-wrap: wrap;
+}
+#lspmt-panel-menu button {
+  flex: auto 1;
+  height: 2.5em;
+  margin: 0.1em;
+}
+*[data-lspmt] {
+  display: inline-block;
+  border: 6px double transparent;
+  padding: 2px;
+  margin: -2px 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+*[data-lspmt]:hover { border-color: #ccc }
+*[data-lspmt=batch] { border-color: #3ba }
+*[data-lspmt=batch]:hover { border-color: #276 }
+*[data-lspmt=selected] { border-color: #f00 }
+*[data-lspmt=selected]:hover { border-color: #c00 }
+*[hidden] { display: none !important }
+.lspmt-imgwrap {
+  position: relative;
+  display: inline-block;
+}
+.lspmt-imgwrap.lspmt-imgwrap-loading::before {
+  content: " ";
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  margin: auto;
+  width: 5vh; height: 5vh;
+  border: 1vh solid #3ba;
+  border-bottom-color: transparent;
+  border-radius: 5vh;
+  animation: lspmt-imgwrap-spinner 1s linear infinite;
+}
+@keyframes lspmt-imgwrap-spinner {
+  to { transform: rotate(360deg) }
+}
