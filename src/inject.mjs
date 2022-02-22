@@ -187,6 +187,7 @@ LSPMT.loaded.then(function () {
       return
     } finally {
       $wrap.classList.remove("lspmt-imgwrap-loading")
+      $img.setAttribute("data-lspmt", "")
     }
 
     $img.setAttribute("data-lspmt", "")
