@@ -2,13 +2,15 @@
   background-color: #bed;
   padding: 2vh 2vh;
   font-size: 2vh;
-  border-bottom: 2px solid #398;
-  box-shadow: 0 -1vh 2vh 1vh rgba(0,0,0,0.5);
+  border: 2px solid #7ba;
+  border-top: none;
+  border-left: none;
+  border-bottom-right-radius: 2vh;
+  box-shadow: -1vh -1vh 2vh 1vh rgba(0, 0, 0, 0.5);
   position: sticky;
   z-index: 514;
-  top: 0;
-  width: 100%;
-  box-sizing: border-box;
+  top: 0; left: 0;
+  display: inline-block;
 }
 #lspmt-panel * {
   line-height: 120%;
