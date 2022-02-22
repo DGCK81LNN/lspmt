@@ -2,8 +2,7 @@
 // ==UserScript==
 // @name         LNNの贴吧多功能图片解密工具
 // @namespace    https://dgck81lnn.github.io/blog/
-// @version      0.1.0
-// @author       DGCK81LNN
+// @version      [update in package.json]
 // @match        https://tieba.baidu.com/p/*
 // ==/UserScript==
 */
