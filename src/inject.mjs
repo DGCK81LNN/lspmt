@@ -2,7 +2,7 @@
 // ==UserScript==
 // @name         LNNの贴吧多功能图片解密工具
 // @namespace    https://dgck81lnn.github.io/blog/
-// @version      0.0.2
+// @version      0.1.0
 // @author       DGCK81LNN
 // @match        https://tieba.baidu.com/p/*
 // ==/UserScript==
@@ -44,17 +44,17 @@ LSPMT.loaded.then(function () {
     tphxrrc: "图片混淆（兼容 PicEncrypt 行+列模式）",
   }
 
-  detect($thread)
-  new MutationObserver(records => {
-    records.forEach(record => {
-      record.addedNodes.forEach($node => void detect($node))
-    })
-  }).observe($thread, { childList: true })
-
   var mode = ""
   var token = "0.666"
   var $selected = null
   var panelWasOpen = false
+
+  detect($thread)
+  new MutationObserver(records => {
+    records.forEach(record => {
+      record.addedNodes.forEach($node => { detect($node) })
+    })
+  }).observe($thread, { childList: true })
 
   $thread.addEventListener("click", ev => {
     if (!ev.target.hasAttribute("data-lspmt")) return
@@ -72,14 +72,14 @@ LSPMT.loaded.then(function () {
     }
   }, true)
 
-  $$$("lspmt-button-deselect").addEventListener("click", () => void deselect())
+  $$$("lspmt-button-deselect").addEventListener("click", () => { deselect() })
 
-  $$$("lspmt-button-wytk").addEventListener("click", () => void chooseMode("wytk"))
-  $$$("lspmt-button-tpwjj").addEventListener("click", () => void chooseMode("tpwjj"))
-  $$$("lspmt-button-tphxr").addEventListener("click", () => void chooseMode("tphxr"))
-  $$$("lspmt-button-tphxrc").addEventListener("click", () => void chooseMode("tphxrc"))
-  $$$("lspmt-button-tphxrr").addEventListener("click", () => void chooseMode("tphxrr"))
-  $$$("lspmt-button-tphxrrc").addEventListener("click", () => void chooseMode("tphxrrc"))
+  $$$("lspmt-button-wytk").addEventListener("click", () => { chooseMode("wytk") })
+  $$$("lspmt-button-tpwjj").addEventListener("click", () => { chooseMode("tpwjj") })
+  $$$("lspmt-button-tphxr").addEventListener("click", () => { chooseMode("tphxr") })
+  $$$("lspmt-button-tphxrc").addEventListener("click", () => { chooseMode("tphxrc") })
+  $$$("lspmt-button-tphxrr").addEventListener("click", () => { chooseMode("tphxrr") })
+  $$$("lspmt-button-tphxrrc").addEventListener("click", () => { chooseMode("tphxrrc") })
 
   $$$("lspmt-button-batchdone").addEventListener("click", () => {
     mode = ""
@@ -92,16 +92,17 @@ LSPMT.loaded.then(function () {
   function detect($node) {
     if ($node.nodeType !== Node.ELEMENT_NODE) return
     $node.querySelectorAll(".BDE_Image:not([data-lspmt])").forEach($img => {
-      $img.setAttribute("data-lspmt", "")
+      $img.setAttribute("data-lspmt", mode && "batch")
     })
   }
 
   function select($el) {
+    if (!$selected) panelWasOpen = $panelCollapse.open
+
     deselect(true)
     $selected = $el
-    $selected.setAttribute("data-lspmt", "selected")
+    $el.setAttribute("data-lspmt", "selected")
 
-    panelWasOpen = $panelCollapse.open
     $panelCollapse.open = true
     $hintSelected.hidden = false
     $hintBatch.hidden = true
@@ -122,6 +123,7 @@ LSPMT.loaded.then(function () {
   function chooseMode(action) {
     if ($selected) {
       process($selected, action)
+      deselect()
     } else {
       mode = action
       if (mode.startsWith("tphx")) {
@@ -166,10 +168,10 @@ LSPMT.loaded.then(function () {
     $wrap.classList.add("lspmt-imgwrap", "lspmt-imgwrap-loading")
     $img.parentNode.replaceChild($wrap, $img)
     $wrap.appendChild($img)
-    $img.setAttribute("data-lspmt", "")
+    $img.setAttribute("data-lspmt", "loading")
 
     try {
-      var imgBlob = await (await fetch($img.src)).blob()
+      var imgBlob = $img._LSPMTBlob || await (await fetch($img.src)).blob()
 
       switch (action) {
         case "wytk": {
@@ -177,7 +179,7 @@ LSPMT.loaded.then(function () {
           break
         }
         default: {
-          return alert("Not Implemented")
+          return alert("该功能尚未制作完成，敬请期待")
         }
       }
     } catch (error) {
@@ -188,12 +190,13 @@ LSPMT.loaded.then(function () {
       $wrap.classList.remove("lspmt-imgwrap-loading")
     }
 
+    $img.setAttribute("data-lspmt", "")
     $img.hidden = true
     results.forEach(file => {
       /** @type {HTMLImageElement & { _LSPMTBlob: File }} */
       var $img = document.createElement("img")
       $img.className = "lspmt-result"
-      $img.setAttribute("data-lspmt", mode)
+      $img.setAttribute("data-lspmt", "")
       $img.src = URL.createObjectURL(file)
       $img._LSPMTBlob = file
       $wrap.append($img, document.createElement("br"))
