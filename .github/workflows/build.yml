@@ -6,6 +6,9 @@ on:
       tag:
         required: true
         type: string
+      prerelease:
+        required: true
+        type: boolean
 
 jobs:
   build:
@@ -25,5 +28,6 @@ jobs:
           generate_release_notes: true
           fail_on_unmatched_files: true
           tag_name: ${{ github.event.inputs.tag }}
+          prerelease: ${{ github.event.inputs.prerelease }}
           files: |
             dist/lspmultitool.user.js
