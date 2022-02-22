@@ -7,7 +7,7 @@
   border-left: none;
   border-bottom-right-radius: 2vh;
   box-shadow: -1vh -1vh 2vh 1vh rgba(0, 0, 0, 0.5);
-  position: sticky;
+  position: fixed;
   z-index: 514;
   top: 0; left: 0;
   display: inline-block;
