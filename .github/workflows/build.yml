@@ -3,6 +3,11 @@ name: Build
 on:
   push:
     tags: [ "*" ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+        type: string
 
 jobs:
   build:
@@ -18,5 +23,6 @@ jobs:
         uses: softprops/action-gh-release@v0.1.14
         with:
           generate_release_notes: true
+          fail_on_unmatched_files: true
           files: |
             dist/lspmultitool.user.js
