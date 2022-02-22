@@ -4,6 +4,7 @@
 // @namespace    https://github.com/DGCK81LNN/lspmt
 // @version      [update in package.json]
 // @match        https://tieba.baidu.com/p/*
+// @author       DGCK81LNN
 // ==/UserScript==
 */
 
