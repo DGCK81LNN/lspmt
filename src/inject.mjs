@@ -170,17 +170,24 @@ LSPMT.loaded.then(function () {
     $wrap.appendChild($img)
     $img.setAttribute("data-lspmt", "loading")
 
+    /** @type {(File | Error)[]} */
+    var results = null
     try {
       var imgBlob = $img._LSPMTBlob || await (await fetch($img.src)).blob()
 
       switch (action) {
         case "wytk": {
-          var results = [await LSPMT.decodeWYTK(imgBlob)]
+          results = [await LSPMT.decodeWYTK(imgBlob)]
           break
         }
-        default: {
-          return alert("该功能尚未制作完成，敬请期待")
+        case "tpwjj": {
+          results = await LSPMT.extractTPWJJ(imgBlob)
+          if (results.length === 0) {
+            throw new Error("这张图片不是图片文件夹")
+          }
+          break
         }
+        default: return
       }
     } catch (error) {
       alert("操作失败：" + error)
@@ -194,13 +201,17 @@ LSPMT.loaded.then(function () {
     $img.setAttribute("data-lspmt", "")
     $img.hidden = true
     results.forEach(file => {
-      /** @type {HTMLImageElement & { _LSPMTBlob: File }} */
-      var $img = document.createElement("img")
-      $img.className = "lspmt-result"
-      $img.setAttribute("data-lspmt", "")
-      $img.src = URL.createObjectURL(file)
-      $img._LSPMTBlob = file
-      $wrap.append($img, document.createElement("br"))
+      if (file instanceof Error) {
+        console.warn(file)
+      } else {
+        /** @type {HTMLImageElement & { _LSPMTBlob: File }} */
+        var $result = document.createElement("img")
+        $result.className = "lspmt-result"
+        $result.setAttribute("data-lspmt", "")
+        $result.src = URL.createObjectURL(file)
+        $result._LSPMTBlob = file
+        $wrap.append($result, document.createElement("br"))
+      }
     })
   }
 })

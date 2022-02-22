@@ -76,9 +76,17 @@ export async function decodeWYTK(blob) {
 }
 
 /**
- * @param {ArrayBuffer} buffer
+ * @param {Blob} blob
  */
-export function extractTPWJJ(buffer) {
+export async function extractTPWJJ(blob) {
+  /** @type {ArrayBuffer} */
+  var buffer = await new Promise((resolve, reject) => {
+    var reader = new FileReader()
+    reader.onload = () => { resolve(reader.result) }
+    reader.onerror = () => { reject(reader.error) }
+    reader.readAsArrayBuffer(blob)
+  })
+
   var view = new DataView(buffer)
   var magic1 = view.getUint32(0),
     magic2 = view.getUint32(4)
