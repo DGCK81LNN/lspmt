@@ -1,6 +1,8 @@
 name: Build
 
 on:
+  push:
+    branch: [ main ]
   workflow_dispatch:
     inputs:
       tag:
@@ -23,6 +25,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Publish Release
+        if: github.event_name == 'workflow_dispatch'
         uses: softprops/action-gh-release@v0.1.14
         with:
           generate_release_notes: true
