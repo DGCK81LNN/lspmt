@@ -46,9 +46,3 @@ buildSync({
   outfile: "dist/lspmultitool.user.js",
   logLevel: "info",
 })
-
-console.log("\n======== cleanup ========")
-
-console.log("remove version tag...")
-injectCode = injectCode.replace(versionTagRegex, `$1${versionTagPlaceholder}`)
-writeFileSync("./src/inject.mjs", injectCode)
