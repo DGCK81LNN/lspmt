@@ -3,16 +3,14 @@
 import { readFileSync, writeFileSync } from "fs"
 import { transformSync, buildSync } from "esbuild"
 const versionTagRegex = /^(\/\/[ ]*@version\s+).*$/m
-const versionTagPlaceholder = "[update in package.json]"
 
-console.log("\n======== prepare ========")
-
-console.log("update version tag...")
+console.log("get version tag...")
 var packageJson = readFileSync("./package.json").toString()
 var { version } = JSON.parse(packageJson)
-var injectCode = readFileSync("./src/inject.mjs").toString()
-injectCode = injectCode.replace(versionTagRegex, `$1${version}`)
-writeFileSync("./src/inject.mjs", injectCode)
+
+console.log("get banner...")
+var bannerCode = readFileSync("./src/banner.js").toString()
+bannerCode = bannerCode.replace(versionTagRegex, (_, $1) => `${$1}${version}`)
 
 var isDevelopment = process.argv.indexOf("--dev", 2) !== -1
 
@@ -44,13 +42,7 @@ buildSync({
     ".html": "text",
     ".worker.js": "dataurl",
   },
-  sourcemap: isDevelopment && "inline",
+  banner: { js: bannerCode },
   outfile: "dist/lspmultitool.user.js",
   logLevel: "info",
 })
-
-console.log("\n======== cleanup ========")
-
-console.log("remove version tag...")
-injectCode = injectCode.replace(versionTagRegex, `$1${versionTagPlaceholder}`)
-writeFileSync("./src/inject.mjs", injectCode)
