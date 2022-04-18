@@ -1,8 +1,7 @@
 name: Build
-
 on:
   push:
-    branch: [ main ]
+    branches: [ main ]
   workflow_dispatch:
     inputs:
       tag:
@@ -11,9 +10,9 @@ on:
       prerelease:
         required: true
         type: boolean
-
 jobs:
   build:
+    if: ${{ !(github.event_name == 'push' && github.run_attempt == 1 && contains(github.event.head_commit.message, '@@__LNN_NO_BUILD__@@')) }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
