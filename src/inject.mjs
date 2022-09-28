@@ -144,9 +144,28 @@ LSPMT.loaded.then(function () {
   async function process($img, action) {
     if ($img.classList.contains("BDE_Image")) {
       // 加载原图
-      $img.src = $img.src
-        .replace("http://", "https://")
-        .replace(/w%3D[^\/]+\/sign=[^\/]+/, "pic/item")
+      const imgId = $img.src.match(/\/(\w+)\.[^/]*$/)?.[1]
+      if (imgId) {
+        try {
+          if (typeof PageData !== "object")
+            throw new Error("找不到 PageData 对象")
+          const threadId = PageData?.thread?.thread_id
+          if (threadId === undefined) throw new Error("找不到帖子 ID")
+
+          const imgPageUrl = `//tieba.baidu.com/photo/p?tid=${threadId}&pic_id=${imgId}`
+          const imgPageHtml = await (await fetch(imgPageUrl)).text()
+          const imgUrl = imgPageHtml.match(
+            /\/\/tiebapic\.baidu\.com\/forum\/pic\/item\/[^"]+/
+          )?.[0]
+          if (threadId === undefined) throw new Error("找不到原图 URL")
+
+          $img.src = "https:" + imgUrl
+        } catch (error) {
+          alert("加载原图失败：" + error)
+          console.error(error)
+          return
+        }
+      }
 
       // 展开长图
       if ($img.parentElement.classList.contains("replace_div")) {
