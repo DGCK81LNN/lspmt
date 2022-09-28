@@ -1,3 +1,5 @@
+2022-09-28：由于现在贴吧**只提供压缩过的 JPEG 图片**，**本工具已失效**，之前残留的图片均无法解码（[#3](https://github.com/DGCK81LNN/lspmt/issues/3)），寄。即日起本仓库将存档。
+
 # LNNの贴吧多功能图片解密工具
 
 [![查看构建状态][workflow_badge]][workflow_link] [![下载/安装][download_badge]][download_link]
