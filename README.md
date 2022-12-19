@@ -4,7 +4,7 @@
 
 [![查看构建状态][workflow_badge]][workflow_link] [![下载/安装][download_badge]][download_link]
 
-[workflow_badge]: https://img.shields.io/github/workflow/status/DGCK81LNN/lspmt/Build?label=%E6%9E%84%E5%BB%BA%E7%8A%B6%E6%80%81&logo=githubactions&logoColor=white
+[workflow_badge]: https://img.shields.io/github/actions/workflow/status/DGCK81LNN/lspmt/build.yml?branch=main&label=%E6%9E%84%E5%BB%BA%E7%8A%B6%E6%80%81&logo=githubactions&logoColor=white
 [workflow_link]: https://github.com/DGCK81LNN/lspmt/actions/workflows/build.yml
 [download_badge]: https://img.shields.io/github/v/release/DGCK81LNN/lspmt?label=%E4%B8%8B%E8%BD%BD%2F%E5%AE%89%E8%A3%85&sort=semver&include_prereleases
 [download_link]: https://github.com/DGCK81LNN/lspmt/releases/latest/download/lspmultitool.user.js
